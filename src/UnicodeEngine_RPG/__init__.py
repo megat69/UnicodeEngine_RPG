@@ -69,6 +69,20 @@ class UnicodeEngine_RPG:
 				if confirm.lower() == "y":
 					sys.exit(0)
 
+			# Displaying the controls
+			elif keystroke == "c":
+				controls_text_indicator = "Movement :\n"
+				controls_text_indicator += f"      ____ \n     ||{self.controls[0].upper()} ||\n     ||__||\n     |/__\|\n" \
+				                           f" ____ ____ ____\n||{self.controls[1].upper()} |||{self.controls[2].upper()}" \
+				                           f" |||{self.controls[3].upper()} ||\n" \
+				                           "||__|||__|||__||\n|/__\|/__\|/__\|"
+				controls_text_indicator += "\n" * 3 + "Interact :\n"
+				controls_text_indicator += f" ____ \n||{self.controls[4].upper()} ||\n||__||\n|/__\|"
+
+				print("\n" * max(self.playable_area[0] - len(controls_text_indicator.split("\n")) - 2, 0),
+				      controls_text_indicator, "\n" * 2, sep="")
+				getch()
+
 			# Movement
 			old_player_pos = self.player.position.copy()
 			if keystroke == self.controls[0]:
