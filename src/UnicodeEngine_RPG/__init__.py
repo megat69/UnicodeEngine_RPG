@@ -71,49 +71,56 @@ class UnicodeEngine_RPG:
 
 			# Displaying the controls
 			elif keystroke == "c":
-				controls_text_indicator = "Movement :\n"
-				controls_text_indicator += f"      ____ \n     ||{self.controls[0].upper()} ||\n     ||__||\n     |/__\|\n" \
-				                           f" ____ ____ ____\n||{self.controls[1].upper()} |||{self.controls[2].upper()}" \
-				                           f" |||{self.controls[3].upper()} ||\n" \
-				                           "||__|||__|||__||\n|/__\|/__\|/__\|"
-				controls_text_indicator += "\n" * 3 + "Interact :\n"
-				controls_text_indicator += f" ____ \n||{self.controls[4].upper()} ||\n||__||\n|/__\|"
+				self.display_controls()
 
-				print("\n" * max(self.playable_area[0] - len(controls_text_indicator.split("\n")) - 2, 0),
-				      controls_text_indicator, "\n" * 2, sep="")
-				getch()
-
-			# Movement
-			old_player_pos = self.player.position.copy()
-			if keystroke == self.controls[0]:
-				self.player.position[0] -= 1
-				self.player.current_direction = 1
-			elif keystroke == self.controls[2]:
-				self.player.position[0] += 1
-				self.player.current_direction = 2
-			elif keystroke == self.controls[1]:
-				self.player.position[1] -= 1
-				self.player.current_direction = 0
-			elif keystroke == self.controls[3]:
-				self.player.position[1] += 1
-				self.player.current_direction = 3
-
-			# Checking if the list is not out of bounds
-			if self.player.position[0] < 0:
-				self.player.position[0] = 0
-			elif self.player.position[0] >= len(self.tilemap):
-				self.player.position[0] = len(self.tilemap) - 1
-			elif self.player.position[1] < 0:
-				self.player.position[1] = 0
-			elif self.player.position[1] >= len(self.tilemap[0]):
-				self.player.position[1] = len(self.tilemap[0]) - 1
-
-			# Moving player if speed of tile in front is different from -1
-			if self.tilemap[self.player.position[0]][self.player.position[1]].speed == -1:
-				self.player.position = old_player_pos.copy()
+			self.do_movement(keystroke)
 
 			# Keeping track of the time to execution
 			self._last_frame_executed = time.time()
+
+	def do_movement(self, keystroke):
+		# Movement
+		old_player_pos = self.player.position.copy()
+		if keystroke == self.controls[0]:
+			self.player.position[0] -= 1
+			self.player.current_direction = 1
+		elif keystroke == self.controls[2]:
+			self.player.position[0] += 1
+			self.player.current_direction = 2
+		elif keystroke == self.controls[1]:
+			self.player.position[1] -= 1
+			self.player.current_direction = 0
+		elif keystroke == self.controls[3]:
+			self.player.position[1] += 1
+			self.player.current_direction = 3
+
+		# Checking if the list is not out of bounds
+		if self.player.position[0] < 0:
+			self.player.position[0] = 0
+		elif self.player.position[0] >= len(self.tilemap):
+			self.player.position[0] = len(self.tilemap) - 1
+		elif self.player.position[1] < 0:
+			self.player.position[1] = 0
+		elif self.player.position[1] >= len(self.tilemap[0]):
+			self.player.position[1] = len(self.tilemap[0]) - 1
+
+		# Resetting to last position if speed of tile in front is different from -1 (collision)
+		if self.tilemap[self.player.position[0]][self.player.position[1]].speed == -1:
+			self.player.position = old_player_pos.copy()
+
+
+	def display_controls(self):
+		controls_text_indicator = "Movement :\n"
+		controls_text_indicator += f"      ____ \n     ||{self.controls[0].upper()} ||\n     ||__||\n     |/__\|\n" \
+		                           f" ____ ____ ____\n||{self.controls[1].upper()} |||{self.controls[2].upper()}" \
+		                           f" |||{self.controls[3].upper()} ||\n" \
+		                           "||__|||__|||__||\n|/__\|/__\|/__\|"
+		controls_text_indicator += "\n" * 3 + "Interact :\n"
+		controls_text_indicator += f" ____ \n||{self.controls[4].upper()} ||\n||__||\n|/__\|"
+
+		print("\n" * max(self.playable_area[0] - len(controls_text_indicator.split("\n")) - 2, 0),
+		      controls_text_indicator, "\n" * 2, sep="")
+		getch()
 
 	def render_tiles(self, force_no_color: bool = False):
 		"""
