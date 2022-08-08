@@ -6,6 +6,7 @@ import colorama; colorama.init()
 from colorama import Fore, Back, Style
 import sys
 from typing import Callable, Union
+from copy import deepcopy
 
 from chars import Char
 from getch import getch
@@ -89,6 +90,33 @@ class UnicodeEngine_RPG:
 			elif keystroke == "c":
 				self.display_controls()
 
+			# If the action key is pressed
+			elif keystroke == self.controls[4]:
+				# If the player is doing an action, we check the tile in front of it for the action.
+				# Beforehand, we create a position list for the direction, so we know later which tile the player is
+				# interacting with.
+				relative_tile_position = [0, 0]
+				if self.player.current_direction == 1: relative_tile_position[0] = -1
+				elif self.player.current_direction == 2: relative_tile_position[0] = 1
+				elif self.player.current_direction == 3: relative_tile_position[1] = 1
+				elif self.player.current_direction == 0: relative_tile_position[1] = -1
+
+				try:
+					# We check if the tile is in range, and if not, just go to the exception
+					if self.player.position[0] + relative_tile_position[0] < 0 or \
+							self.player.position[1] + relative_tile_position[1] < 0:
+						raise IndexError
+
+					tile = self.tilemap[self.player.position[0] + relative_tile_position[0]][self.player.position[1] \
+					        + relative_tile_position[1]]
+					# If the action of this tile is None, we just ignore it
+					if tile.action is not None:
+						tile.action()
+
+				except IndexError:
+					# If any error from tile number occurs, we just skip it, as it is the intended way
+					pass
+
 			self.do_movement(keystroke)
 
 			# Keeping track of the time to execution
@@ -121,9 +149,15 @@ class UnicodeEngine_RPG:
 		elif self.player.position[1] >= len(self.tilemap[0]):
 			self.player.position[1] = len(self.tilemap[0]) - 1
 
+		# Remembering the tile on which the player is on
+		tile = self.tilemap[self.player.position[0]][self.player.position[1]]
 		# Resetting to last position if tile in front is a collider
-		if self.tilemap[self.player.position[0]][self.player.position[1]].collision is True:
+		if tile.collision is True:
 			self.player.position = old_player_pos.copy()
+		# Otherwise, calling the walk_action of the tile the player is on (if it is not None)
+		else:
+			if tile.walk_action is not None and old_player_pos != self.player.position:
+				tile.walk_action()
 
 
 	def display_controls(self):
@@ -257,14 +291,18 @@ class UnicodeEngine_RPG:
 
 
 if __name__ == '__main__':
-	plain_char = Char("▓")
+	plain_char = Char("▓", color=Back.GREEN)
 	semi_plain_char = Char("▒", position=2, color=Back.YELLOW)
+
+	def hello():
+		print("Hello !")
+		getch()
 
 	app = UnicodeEngine_RPG(
 		tilemap = [
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
-			[plain_char, plain_char, semi_plain_char.set_collision(True), plain_char, plain_char],
+			[plain_char, deepcopy(plain_char).set_walk_action(hello), deepcopy(semi_plain_char).set_collision(True).set_action(hello), plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char]
 		],

@@ -54,3 +54,21 @@ class Char:
 		"""
 		self.position = position
 		return self
+
+
+	def set_action(self, action: Union[Callable, None]):
+		"""
+		Sets the function that should be triggered when the player uses the action key in front of the tile.
+		:return: The class instance, to allow for class chaining.
+		"""
+		self.action = action
+		return self
+
+
+	def set_walk_action(self, walk_action: Union[Callable, None]):
+		"""
+		Sets the function that should be triggered when the player walks on the tile.
+		:return: The class instance, to allow for class chaining.
+		"""
+		self.walk_action = walk_action
+		return self
