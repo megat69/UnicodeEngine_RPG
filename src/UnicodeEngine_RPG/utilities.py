@@ -1,10 +1,11 @@
 """
 Utility functions used by the engine, can also be used by the user..
 """
-from getch import getch
 from colorama import Style
 from time import sleep
 import sys
+
+from UnicodeEngine_RPG.getch import getch
 
 
 def display_text(text: str, slowness_multiplier: float = 1.0, do_getch: bool = True):
