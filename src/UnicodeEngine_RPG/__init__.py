@@ -21,8 +21,7 @@ class UnicodeEngine_RPG:
 			playable_area: tuple = (20, 10),
 			controls: str = "wasdf",
 			force_monochrome: bool = False,
-			inventory: dict = None,
-			update: Callable = None
+			inventory: dict = None
 	):
 		"""
 		Initialization of a new engine instance.
