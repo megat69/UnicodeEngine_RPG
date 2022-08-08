@@ -12,6 +12,7 @@ from chars import Char
 from getch import getch
 from player import Player
 from inventory import InventoryItem
+from utilities import display_text
 
 
 class UnicodeEngine_RPG:
@@ -295,12 +296,11 @@ if __name__ == '__main__':
 	semi_plain_char = Char("▒", position=2, color=Back.YELLOW)
 
 	def hello():
-		print("Hello !")
-		getch()
+		display_text("Hello !")
 
 	def is_low_health(value):
 		if app.inventory["health"].value < 5:
-			print("Low health !")
+			display_text(Fore.RED + "Low health !" + Style.RESET_ALL, slowness_multiplier=0.5, do_getch=False)
 		elif app.inventory["health"].value <= 0:
 			sys.exit(0)
 		return value
