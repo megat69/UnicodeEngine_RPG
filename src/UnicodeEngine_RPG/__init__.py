@@ -68,6 +68,7 @@ class UnicodeEngine_RPG:
 
 		self._last_frame_executed = time.time()
 		self.dt = 0
+		self.keystroke = ""
 		# Main loop
 		while True:
 			# Capping at 60 frames per second
@@ -81,18 +82,18 @@ class UnicodeEngine_RPG:
 			self.render_tiles(force_no_color=self.force_monochrome)
 
 			# Getting the next keystroke
-			keystroke = getch()
-			if keystroke == "n":
+			self.keystroke = getch()
+			if self.keystroke == "n":
 				confirm = input("Do you want to leave ? (y/n): ")
 				if confirm.lower() == "y":
 					sys.exit(0)
 
 			# Displaying the controls
-			elif keystroke == "c":
+			elif self.keystroke == "c":
 				self.display_controls()
 
 			# If the action key is pressed
-			elif keystroke == self.controls[4]:
+			elif self.keystroke == self.controls[4]:
 				# If the player is doing an action, we check the tile in front of it for the action.
 				# Beforehand, we create a position list for the direction, so we know later which tile the player is
 				# interacting with.
@@ -118,7 +119,7 @@ class UnicodeEngine_RPG:
 					# If any error from tile number occurs, we just skip it, as it is the intended way
 					pass
 
-			self.do_movement(keystroke)
+			self.do_movement(self.keystroke)
 
 			# Keeping track of the time to execution
 			self._last_frame_executed = time.time()
