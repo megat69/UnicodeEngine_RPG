@@ -5,10 +5,14 @@ import time
 import colorama; colorama.init()
 from colorama import Fore, Back, Style
 import sys
+from typing import Callable
 
 from chars import Char
 from getch import getch
 from player import Player
+from inventory import InventoryItem
+
+
 class UnicodeEngine_RPG:
 	def __init__(
 			self,
@@ -16,7 +20,9 @@ class UnicodeEngine_RPG:
 			player: Player,
 			playable_area: tuple = (20, 10),
 			controls: str = "wasdf",
-			force_monochrome: bool = False
+			force_monochrome: bool = False,
+			inventory: dict = None,
+			update: Callable = None
 	):
 		"""
 		Initialization of a new engine instance.
@@ -33,17 +39,23 @@ class UnicodeEngine_RPG:
 			- Action key
 			('wasdf' by default)
 		:param force_monochrome: Whether to disable color rendering. False by default.
+		:param inventory: A dict of InventoryItem class instances and their keys.
 		"""
 		self.tilemap = tilemap
 		self.playable_area = playable_area
 		self.player = player
 		self.controls = controls
 		self.force_monochrome = force_monochrome
+		self.inventory = inventory if inventory is not None else {}
 
-	def run(self):
+	def run(self, update: Callable = None):
 		"""
 		Launches the engine main loop.
+		:param update: A function that will get called every frame, having as parameter the delta time.
 		"""
+		# Registers the update function
+		self.update = update if update is not None else lambda dt: None
+
 		# Asking the user to resize his console
 		print("\n" * 20)
 		for i in range(self.playable_area[0]):
@@ -54,10 +66,15 @@ class UnicodeEngine_RPG:
 		getch()
 
 		self._last_frame_executed = time.time()
+		self.dt = 0
 		# Main loop
 		while True:
 			# Capping at 60 frames per second
 			if time.time() - self._last_frame_executed < 1/15: continue
+			self.dt = time.time() - self._last_frame_executed
+
+			# Calling the update method
+			self.update(self.dt)
 
 			# Rendering the tilemap
 			self.render_tiles(force_no_color=self.force_monochrome)
@@ -77,6 +94,7 @@ class UnicodeEngine_RPG:
 
 			# Keeping track of the time to execution
 			self._last_frame_executed = time.time()
+
 
 	def do_movement(self, keystroke):
 		# Movement
@@ -104,8 +122,8 @@ class UnicodeEngine_RPG:
 		elif self.player.position[1] >= len(self.tilemap[0]):
 			self.player.position[1] = len(self.tilemap[0]) - 1
 
-		# Resetting to last position if speed of tile in front is different from -1 (collision)
-		if self.tilemap[self.player.position[0]][self.player.position[1]].speed == -1:
+		# Resetting to last position if tile in front is a collider
+		if self.tilemap[self.player.position[0]][self.player.position[1]].collision is True:
 			self.player.position = old_player_pos.copy()
 
 
@@ -122,10 +140,11 @@ class UnicodeEngine_RPG:
 		      controls_text_indicator, "\n" * 2, sep="")
 		getch()
 
-	def render_tiles(self, force_no_color: bool = False):
+
+	def render_tiles(self, force_no_color: bool = False, display_inventory: bool = True):
 		"""
 		Main rendering function, allows to render all the tiles in the tilemap and display them on
-		the screen. It also displays the player.
+		the screen. It also displays the player and the inventory.
 		"""
 		final_str = "" + Fore.WHITE
 		# Fetching every coordinate in the displayed range
@@ -220,6 +239,14 @@ class UnicodeEngine_RPG:
 			final_str += "\n" + Style.RESET_ALL
 
 
+		# Inventory display
+		if display_inventory:
+			final_str = final_str.split("\n")
+			for i, element in enumerate(self.inventory.values()):
+				final_str[i + 2] += "\t" + Style.RESET_ALL + element.name + " : " + str(element.value)
+			final_str = "\n".join(final_str)
+
+
 		if force_no_color:
 			for style in ("BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE", "RESET"):
 				for element in (Back, Fore):
@@ -238,14 +265,21 @@ if __name__ == '__main__':
 		tilemap = [
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
-			[plain_char, plain_char, semi_plain_char.set_speed(-1), plain_char, plain_char],
+			[plain_char, plain_char, semi_plain_char.set_collision(True), plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char]
 		],
 		player = Player([0, 0]),
 		playable_area = (8, 8),
 		controls = "zqsdf",
-		force_monochrome = False
+		force_monochrome = False,
+		inventory = {
+			"health": InventoryItem("Health", 15, lambda value: value)
+		}
 	)
 
-	app.run()
+
+	def update(dt:float):
+		app.inventory["health"].update_value(app.inventory["health"].value - dt)
+
+	app.run(update)
