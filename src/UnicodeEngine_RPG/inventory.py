@@ -17,7 +17,7 @@ class InventoryItem:
 		self.update = update
 
 
-	def _update_value(self, value):
+	def update_value(self, value):
 		"""
 		Updates the value based on the user's function.
 		Returns self.
