@@ -48,6 +48,7 @@ class UnicodeEngine_RPG:
 		self.controls = controls
 		self.force_monochrome = force_monochrome
 		self.inventory = inventory if inventory is not None else {}
+		self.quit = self._quit
 
 	def run(self, update: Callable = None):
 		"""
@@ -83,10 +84,9 @@ class UnicodeEngine_RPG:
 
 			# Getting the next keystroke
 			self.keystroke = getch()
+
 			if self.keystroke == "n":
-				confirm = input("Do you want to leave ? (y/n): ")
-				if confirm.lower() == "y":
-					sys.exit(0)
+				self.quit()
 
 			# Displaying the controls
 			elif self.keystroke == "c":
@@ -123,6 +123,12 @@ class UnicodeEngine_RPG:
 
 			# Keeping track of the time to execution
 			self._last_frame_executed = time.time()
+
+
+	def _quit(self):
+		confirm = input("Do you want to leave ? (y/n): ")
+		if confirm.lower() == "y":
+			sys.exit(0)
 
 
 	def do_movement(self, keystroke):
