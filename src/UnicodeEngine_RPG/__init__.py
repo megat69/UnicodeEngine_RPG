@@ -298,6 +298,13 @@ if __name__ == '__main__':
 		print("Hello !")
 		getch()
 
+	def is_low_health(value):
+		if app.inventory["health"].value < 5:
+			print("Low health !")
+		elif app.inventory["health"].value <= 0:
+			sys.exit(0)
+		return value
+
 	app = UnicodeEngine_RPG(
 		tilemap = [
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
@@ -311,7 +318,7 @@ if __name__ == '__main__':
 		controls = "zqsdf",
 		force_monochrome = False,
 		inventory = {
-			"health": InventoryItem("Health", 15, lambda value: value)
+			"health": InventoryItem("Health", 15, is_low_health)
 		}
 	)
 
