@@ -1,7 +1,16 @@
 from colorama import Fore, Back, Style
+from typing import Callable, Union
 
 class Char:
-	def __init__(self, name: str, position: int = 0, color: Back = Back.BLACK, collision: bool = False):
+	def __init__(
+			self,
+			name: str,
+			position: int = 0,
+			color: Back = Back.BLACK,
+			collision: bool = False,
+			action: Union[Callable, None] = None,
+			walk_action: Union[Callable, None] = None
+	):
 		"""
 		Creates a new character for the game.
 		:param name: A string of exactly one character which represents the current character.
@@ -12,11 +21,15 @@ class Char:
 			3 -> Placed right on the tile
 		:param color: A color from the colorama library ; specifically from the 'Back' class. (Black by default)
 		:param collision: Whether the tile can NOT be walked on. False by default.
+		:param action: The function that should be triggered when the player uses the action key in front of the tile.
+		:param walk_action: The function that should be triggered when the player walks on the tile.
 		"""
 		self.name = name
 		self.position = position
 		self.color = color
 		self.collision = collision
+		self.action = action
+		self.walk_action = walk_action
 
 
 	def __repr__(self):

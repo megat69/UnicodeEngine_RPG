@@ -5,7 +5,7 @@ import time
 import colorama; colorama.init()
 from colorama import Fore, Back, Style
 import sys
-from typing import Callable
+from typing import Callable, Union
 
 from chars import Char
 from getch import getch
@@ -18,7 +18,7 @@ class UnicodeEngine_RPG:
 			self,
 			tilemap: list,
 			player: Player,
-			playable_area: tuple = (20, 10),
+			playable_area: tuple[int, int] | list[int, int] = (20, 10),
 			controls: str = "wasdf",
 			force_monochrome: bool = False,
 			inventory: dict = None
