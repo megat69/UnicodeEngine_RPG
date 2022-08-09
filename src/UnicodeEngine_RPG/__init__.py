@@ -23,7 +23,8 @@ class UnicodeEngine_RPG:
 			playable_area: tuple[int, int] | list[int, int] = (20, 10),
 			controls: str = "wasdf",
 			force_monochrome: bool = False,
-			inventory: dict = None
+			inventory: dict = None,
+			noclip: bool = False
 	):
 		"""
 		Initialization of a new engine instance.
@@ -41,6 +42,7 @@ class UnicodeEngine_RPG:
 			('wasdf' by default)
 		:param force_monochrome: Whether to disable color rendering. False by default.
 		:param inventory: A dict of InventoryItem class instances and their keys.
+		:param noclip: Whether to disable collisions altogether.
 		"""
 		self.tilemap = tilemap
 		self.playable_area = playable_area
@@ -49,6 +51,7 @@ class UnicodeEngine_RPG:
 		self.force_monochrome = force_monochrome
 		self.inventory = inventory if inventory is not None else {}
 		self.quit = self._quit
+		self.noclip = noclip
 
 	def run(self, update: Callable = None):
 		"""
@@ -160,7 +163,7 @@ class UnicodeEngine_RPG:
 		# Remembering the tile on which the player is on
 		tile = self.tilemap[self.player.position[0]][self.player.position[1]]
 		# Resetting to last position if tile in front is a collider
-		if tile.collision is True:
+		if tile.collision is True and self.noclip is False:
 			self.player.position = old_player_pos.copy()
 		# Otherwise, calling the walk_action of the tile the player is on (if it is not None)
 		else:
