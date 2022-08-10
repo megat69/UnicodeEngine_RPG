@@ -8,11 +8,18 @@ import sys
 from typing import Callable, Union
 from copy import deepcopy
 
-from UnicodeEngine_RPG.chars import Char
-from UnicodeEngine_RPG.getch import getch
-from UnicodeEngine_RPG.player import Player
-from UnicodeEngine_RPG.inventory import InventoryItem
-from UnicodeEngine_RPG.utilities import display_text
+try:
+	from UnicodeEngine_RPG.chars import Char
+	from UnicodeEngine_RPG.getch import getch
+	from UnicodeEngine_RPG.player import Player
+	from UnicodeEngine_RPG.inventory import InventoryItem
+	from UnicodeEngine_RPG.utilities import display_text
+except ModuleNotFoundError:
+	from chars import Char
+	from getch import getch
+	from player import Player
+	from inventory import InventoryItem
+	from utilities import display_text
 
 
 class UnicodeEngine_RPG:
