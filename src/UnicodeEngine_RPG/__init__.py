@@ -302,12 +302,17 @@ class UnicodeEngine_RPG:
 
 
 if __name__ == '__main__':
+	# Creating the main characters
 	plain_char = Char("▓", color=Back.GREEN)
 	semi_plain_char = Char("▒", position=2, color=Back.YELLOW)
 
+
+	# Creating a callback function for one character's action
 	def hello():
 		display_text("Hello !")
 
+
+	# Creating a function to update one of the inventory items
 	def is_low_health(value):
 		if app.inventory["health"].value < 5:
 			display_text(Fore.RED + "Low health !" + Style.RESET_ALL, slowness_multiplier=0.5, do_getch=False)
@@ -315,25 +320,31 @@ if __name__ == '__main__':
 			sys.exit(0)
 		return value
 
+
+	# Creating the main class and feeding it the tilemap, along with other arguments
 	app = UnicodeEngine_RPG(
-		tilemap = [
+		tilemap=[
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
-			[plain_char, deepcopy(plain_char).set_walk_action(hello), deepcopy(semi_plain_char).set_collision(True).set_action(hello), plain_char, plain_char],
+			[plain_char, plain_char.copy().set_walk_action(hello),
+			 semi_plain_char.copy().set_collision(True).set_action(hello), plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char],
 			[plain_char, plain_char, plain_char, plain_char, plain_char]
 		],
-		player = Player([0, 0]),
-		playable_area = (8, 8),
-		controls = "zqsdf",
-		force_monochrome = False,
-		inventory = {
+		player=Player([0, 0]),
+		playable_area=(8, 8),
+		controls="zqsdf",  # AZERTY controls, you can change that
+		force_monochrome=False,
+		inventory={
 			"health": InventoryItem("Health", 15, is_low_health)
 		}
 	)
 
 
-	def update(dt:float):
+	# Creating an update function
+	def update(dt: float):
 		app.inventory["health"].update_value(app.inventory["health"].value - dt)
 
+
+	# Finally running the app
 	app.run(update)
