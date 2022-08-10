@@ -1,5 +1,6 @@
 from colorama import Fore, Back, Style
 from typing import Callable, Union
+from copy import deepcopy
 
 class Char:
 	def __init__(
@@ -72,3 +73,9 @@ class Char:
 		"""
 		self.walk_action = walk_action
 		return self
+
+	def copy(self):
+		"""
+		Returns a copy of this object.
+		"""
+		return deepcopy(self)
