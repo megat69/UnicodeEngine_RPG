@@ -21,6 +21,8 @@ Just download this repository, no building is required.
 # Usage
 See [the bottom of this file](https://github.com/megat69/UnicodeEngine_RPG/blob/main/src/UnicodeEngine_RPG/__init__.py) for an example.
 
+You can quit the program using the `n` key of your keyboard.
+
 ## The main `UnicodeEngine_RPG` class
 Instantiate this class at the beginning of your program to use it.
 
@@ -40,6 +42,7 @@ The class can also use some additional parameters :
 - `inventory` (dict) : A dict of InventoryItem class instances (see below) and their keys.
 - `noclip` (bool) : Whether to disable collisions altogether. False by default.
 
+The `quit` method of the class can also be overrided by a callback function.
 
 Once the class is instantiated, and everything in your code is set up, you can call the `run` method of the class. 
 
