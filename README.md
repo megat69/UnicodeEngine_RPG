@@ -26,7 +26,7 @@ Use the command `pip install UnicodeEngine-RPG` to install it.
 Just download this repository, no building is required.
 
 # Usage
-See [the bottom of this file](https://github.com/megat69/UnicodeEngine_RPG/blob/main/src/UnicodeEngine_RPG/__init__.py) for an example.
+See [the bottom of this file](https://github.com/megat69/UnicodeEngine_RPG/blob/main/src/UnicodeEngine_RPG/__init__.py#L311) for an example.
 
 You can quit the program using the `n` key of your keyboard.
 
