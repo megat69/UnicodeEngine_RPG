@@ -2,14 +2,21 @@
 An engine that allows to render worlds and maps for console games based solely on Unicode.
 
 ## Features
-[x] Full player movement
-[x] Customizable controls, player, tilemap...
-[x] Full control over the engine
-[x] Actions from tiles
-[ ] Turn-based fights (WIP)
-[x] Inventory system
-[x] Level editor system (see [UnicodeEngine_RPG_LevelEditor](https://github.com/megat69/UnicodeEngine_RPG_LevelEditor))
-[x] User-created logic in Python
+- [x] Full player movement
+
+- [x] Customizable controls, player, tilemap...
+
+- [x] Full control over the engine
+
+- [x] Actions from tiles
+
+- [ ] Turn-based fights (WIP)
+
+- [x] Inventory system
+
+- [x] Level editor system (see [UnicodeEngine_RPG_LevelEditor](https://github.com/megat69/UnicodeEngine_RPG_LevelEditor))
+
+- [x] User-created logic in Python
 
 ## How to install
 ### Install from PIP
