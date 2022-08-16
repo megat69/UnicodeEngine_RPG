@@ -74,6 +74,15 @@ class Char:
 		self.walk_action = walk_action
 		return self
 
+
+	def set_color(self, color: Back):
+		"""
+		Sets the color of the tile, using an instance of the colorama Back class.
+		:return: The class instance, to allow for class chaining.
+		"""
+		self.color = color
+		return self
+
 	def copy(self):
 		"""
 		Returns a copy of this object.
