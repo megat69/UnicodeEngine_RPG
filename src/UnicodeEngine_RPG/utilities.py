@@ -5,10 +5,7 @@ from colorama import Style
 from time import sleep
 import sys
 
-try:
-	from UnicodeEngine_RPG.getch import getch
-except ModuleNotFoundError:
-	from getch import getch
+from .getch import getch
 
 
 def display_text(text: str, slowness_multiplier: float = 1.0, do_getch: bool = True):
