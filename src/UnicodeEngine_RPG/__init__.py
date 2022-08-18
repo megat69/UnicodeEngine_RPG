@@ -218,7 +218,7 @@ class UnicodeEngine_RPG:
 						try:
 							final_str += self.tilemap[x][y - 1].color + self.tilemap[x][y - 1].name\
 							             + self.tilemap[x][y].color + self.tilemap[x][y].name \
-							             + self.tilemap[x][y - 1].color + self.tilemap[x][y - 1].name + Back.RESET
+							             + self.tilemap[x][y + 1].color + self.tilemap[x][y + 1].name + Back.RESET
 						except IndexError:
 							try:
 								try:
